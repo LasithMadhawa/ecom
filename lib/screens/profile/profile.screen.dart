@@ -1,5 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecom/providers/auth.provider.dart';
+import 'package:ecom/providers/profile.provider.dart';
+import 'package:ecom/screens/login/login-screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -10,12 +14,29 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  AuthProvider? authProvider;
+
+  @override
+  void initState() {
+    authProvider = Provider.of<AuthProvider>(context, listen: false);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          Container(
+          ChangeNotifierProvider(
+          create: (context) => ProfileProvider(),
+          child: Consumer<ProfileProvider>(builder: (context, profileProvider, child) {
+            if (profileProvider.dataState == ProfileDataState.uninitialized) {
+              WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+                profileProvider.fetchData();
+              });
+              return Container();
+            }
+            return Container(
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
             decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
@@ -27,26 +48,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       blurRadius: 5)
                 ]),
             child: Center(
-                child: Column(
+                child: profileProvider.dataState == ProfileDataState.loading ? const CircularProgressIndicator() : Column(
               children: [
                 _buildAvatar(),
                 const SizedBox(
                   height: 10,
                 ),
                 Text(
-                  "Victoria Dian",
+                  profileProvider.user?.name ?? '',
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge
                       ?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  "Member",
+                  profileProvider.user?.email ?? '',
                   style: TextStyle(fontSize: 12.sp),
                 )
               ],
             )),
-          ),
+          );
+          })),
+          
           Container(
             padding: const EdgeInsets.all(10.0),
             margin: const EdgeInsets.all(10.0),
@@ -64,19 +87,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
               shrinkWrap: true,
               children: [
                 _buildListTile("My Address Book", Icons.library_books,
-                    const Color.fromARGB(255, 0, 83, 161)),
+                    const Color.fromARGB(255, 0, 83, 161), () {}),
                 const Divider(),
                 _buildListTile("My Wallet", Icons.attach_money_rounded,
-                    const Color.fromARGB(255, 171, 33, 143)),
+                    const Color.fromARGB(255, 171, 33, 143), () {}),
                 const Divider(),
                 _buildListTile("Edit My Profile", Icons.person_outline_rounded,
-                    const Color.fromARGB(255, 207, 168, 11)),
+                    const Color.fromARGB(255, 207, 168, 11), () {}),
                 const Divider(),
                 _buildListTile("Change My Password", Icons.key_rounded,
-                    const Color.fromARGB(255, 0, 191, 118)),
+                    const Color.fromARGB(255, 0, 191, 118), () {}),
                 const Divider(),
                 _buildListTile("Logout", Icons.phone_outlined,
-                    const Color.fromARGB(255, 78, 0, 223)),
+                    const Color.fromARGB(255, 78, 0, 223), () {
+                      authProvider?.logout();
+                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => const LoginScreen()), (route) => false);
+                    }),
               ],
             ),
           )
@@ -106,7 +132,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildListTile(String label, IconData icon, Color color) {
+  Widget _buildListTile(String label, IconData icon, Color color, Function onClick) {
     return ListTile(
       leading: Container(
           padding: const EdgeInsets.all(5.0),
@@ -128,6 +154,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         size: 16,
         color: Theme.of(context).disabledColor,
       ),
+      onTap: () {
+        onClick();
+      },
     );
   }
 }

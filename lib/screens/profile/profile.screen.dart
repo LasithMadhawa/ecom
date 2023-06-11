@@ -50,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Center(
                 child: profileProvider.dataState == ProfileDataState.loading ? const CircularProgressIndicator() : Column(
               children: [
-                _buildAvatar(),
+                _buildAvatar(profileProvider.user?.avatar ?? ''),
                 const SizedBox(
                   height: 10,
                 ),
@@ -111,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildAvatar() {
+  Widget _buildAvatar(String imageUrl) {
     return SizedBox(
       width: 20.w,
       height: 20.w,
@@ -121,7 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           color: Theme.of(context).colorScheme.inversePrimary,
           child: CachedNetworkImage(
             fit: BoxFit.cover,
-            imageUrl: "https://placeimg.com/640/480/food?i=3",
+            imageUrl: imageUrl,
             placeholder: (context, url) => const Center(
               child: Icon(Icons.image),
             ),

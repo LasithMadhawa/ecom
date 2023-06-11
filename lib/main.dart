@@ -1,4 +1,5 @@
 import 'package:ecom/providers/auth.provider.dart';
+import 'package:ecom/providers/products.provider.dart';
 import 'package:ecom/providers/profile.provider.dart';
 import 'package:ecom/screens/splash/splash-screen.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
           providers: [
             ListenableProvider<AuthProvider>(create: (_) => AuthProvider()),
             ListenableProvider<ProfileProvider>(create: (_) => ProfileProvider()),
+            ListenableProvider<ProductProvider>(create: (_) => ProductProvider()),
           ],
           child: MaterialApp(
               title: 'Ecom',

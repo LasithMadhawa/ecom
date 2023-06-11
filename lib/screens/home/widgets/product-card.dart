@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecom/models/product.model.dart';
 
 class ProductCard extends StatelessWidget {
+  final Product product;
+  final int? index;
   const ProductCard({
     super.key,
+    required this.product,
+    this.index
   });
 
   @override
@@ -36,7 +41,7 @@ class ProductCard extends StatelessWidget {
                     child: CachedNetworkImage(
                       fit: BoxFit.cover,
                       imageUrl:
-                          "https://placeimg.com/640/480/food?i=3",
+                          "https://placeimg.com/640/480/food?i="+index.toString(),
                       placeholder: (context, url) => const Center(
                         child: Icon(Icons.image),
                       ),
@@ -58,7 +63,7 @@ class ProductCard extends StatelessWidget {
                             height: 10,
                           ),
                           Text(
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas iaculis finibus turpis, convallis tincidunt mauris laoreet non.",
+                            product.name ?? "",
                             style: TextStyle(
                                 fontSize: 14.sp,
                                 overflow: TextOverflow.ellipsis),

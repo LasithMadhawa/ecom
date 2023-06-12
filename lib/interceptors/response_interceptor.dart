@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:ecom/models/auth.model.dart';
 import 'package:ecom/screens/login/login-screen.dart';
 import 'package:ecom/services/auth.service.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 class ResponseInterceptor extends InterceptorsWrapper {
   BuildContext? context;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  Dio dio = Dio();
 
   @override
   Future? onRequest(
@@ -24,7 +26,6 @@ class ResponseInterceptor extends InterceptorsWrapper {
   @override
   onResponse(Response response, handler) {
     if (response.statusCode == 403) {
-      //  AuthService.instance.logout();
       navigatorKey.currentState
           ?.push(MaterialPageRoute(builder: (_) => const LoginScreen()));
     }
@@ -32,10 +33,18 @@ class ResponseInterceptor extends InterceptorsWrapper {
   }
 
   @override
-  onError(DioException err, handler) {
+  onError(DioException err, handler) async {
     if (err.response?.statusCode == 401) {
-      print(navigatorKey.currentState);
-      //  AuthService.instance.logout();
+      // If a 401 response is received, refresh the access token
+      String? newAccessToken = await refreshToken();
+
+      if (newAccessToken != null) {
+        // Update the request header with the new access token
+        err.requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
+
+        // Repeat the request with the updated header
+        return handler.resolve(await dio.fetch(err.requestOptions));
+      }
       navigatorKey.currentState
           ?.push(MaterialPageRoute(builder: (_) => const LoginScreen()));
     }
@@ -44,9 +53,8 @@ class ResponseInterceptor extends InterceptorsWrapper {
     return handler.next(err);
   }
 
-  Future<String> refreshToken() async {
-  // Perform a request to the refresh token endpoint and return the new access token.
-  // You can replace this with your own implementation.
-  return 'your_new_access_token';
-}
+  Future<String?> refreshToken() async {
+    Auth? auth = await AuthService.instance.refreshToken();
+    return auth?.accessToken;
+  }
 }

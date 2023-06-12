@@ -87,7 +87,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     gridDelegate: const SliverSimpleGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2
                       ),
-                    // padding: const EdgeInsets.only(top: 0, bottom:90),
                     crossAxisSpacing: 15,
                     mainAxisSpacing: 15,
                     itemCount: productProvider.products.length,
@@ -97,15 +96,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     return ProductCard(product: productProvider.products[index], index: index);
                   },),
                   if (productProvider.dataState == ProductDataState.loading)
-                  Center(
-                    child: Container(
-                      padding: const EdgeInsets.all(10.0),
-                      width: 15,
-                      height: 15,
-                      child: CircularProgressIndicator(strokeWidth: 1,)
-                      ),
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: CircularProgressIndicator(strokeWidth: 1,),
+                    ),
                   ),
-                  SizedBox(height: 30.w,)
+                  SizedBox(height: 25.w,)
                 ],
               );
           })),

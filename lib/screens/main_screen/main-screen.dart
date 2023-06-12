@@ -1,5 +1,6 @@
 import 'package:ecom/screens/home/home-screen.dart';
 import 'package:ecom/screens/inprogress_screen/inprogress-screen.dart';
+import 'package:ecom/screens/main_screen/widgets/current-city.dart';
 import 'package:ecom/screens/profile/profile.screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -29,6 +30,8 @@ class _MainScreenState extends State<MainScreen> {
             ),
           )
         ],
+        title: CurrentCity(),
+        titleTextStyle: Theme.of(context).textTheme.titleMedium,
       ),
       body: Stack(
         children: [

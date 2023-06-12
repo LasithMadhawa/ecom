@@ -30,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
           )
         ],
-        title: CurrentCity(),
+        title: const CurrentCity(),
         titleTextStyle: Theme.of(context).textTheme.titleMedium,
       ),
       body: Stack(
@@ -43,6 +43,7 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
+  // Show the page according to the selected page
   Widget _buildPage() {
     switch (_selectedPageIndex) {
       case 0:
@@ -54,6 +55,7 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+  // Build bottom navigation buttons
   Widget _bottomNavigationButton(String label, IconData icon, int pageIndex) {
     return GestureDetector(
       onTap: () {
@@ -85,6 +87,7 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
+  // Custom shadow fot the appbar; Due to issues with the default shadow
   Widget _appBarShadow(BuildContext context) {
     return Positioned(
       top: 0,
@@ -101,6 +104,7 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
+  //Bottom navigation bar
   Widget _bottomNavigationBar(BuildContext context) {
     return Positioned(
         bottom: 0,
@@ -170,6 +174,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
+// Creating the custom background for the bottom navigation bar
 class BottomNavigationPainter extends CustomPainter {
   BuildContext context;
   BottomNavigationPainter(this.context);

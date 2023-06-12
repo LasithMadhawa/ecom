@@ -31,6 +31,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           create: (context) => ProfileProvider(),
           child: Consumer<ProfileProvider>(builder: (context, profileProvider, child) {
             if (profileProvider.dataState == ProfileDataState.uninitialized) {
+              // Fetch data if the provider it not initialized
               WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
                 profileProvider.fetchData();
               });
@@ -70,6 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           );
           })),
           
+          // Action section
           Container(
             padding: const EdgeInsets.all(10.0),
             margin: const EdgeInsets.all(10.0),
@@ -111,6 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  // Avatar builder
   Widget _buildAvatar(String imageUrl) {
     return SizedBox(
       width: 20.w,
@@ -123,7 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             fit: BoxFit.cover,
             imageUrl: imageUrl,
             placeholder: (context, url) => const Center(
-              child: Icon(Icons.image),
+              child: Icon(Icons.person),
             ),
             errorWidget: (context, url, error) => const Icon(Icons.error),
           ),
@@ -132,6 +135,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+
+  // Build list tiles of the action section
   Widget _buildListTile(String label, IconData icon, Color color, Function onClick) {
     return ListTile(
       leading: Container(

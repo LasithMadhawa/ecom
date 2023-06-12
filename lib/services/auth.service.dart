@@ -22,6 +22,7 @@ class AuthService {
     dio.interceptors.add(ResponseInterceptor());
   }
 
+  // Initializing authentication from the device storage
   Future<Auth?> init() async {
     try {
       var accessToken = await storage.read(key: '__ecom_accesstoken');
@@ -41,6 +42,7 @@ class AuthService {
     }
   }
 
+  // Login request
   Future<Auth?> login(String email, String password) async {
     log("LoggingIn");
     try {
@@ -63,6 +65,7 @@ class AuthService {
     }
   }
 
+  // Refreshing roken
   Future<Auth?> refreshToken() async {
     try {
       String url = '${Config.AUTH_URL}/auth/refresh-token';
@@ -82,11 +85,13 @@ class AuthService {
     }
   }
 
+  // Store tokens
   _setAuth(Auth auth) async {
     await storage.write(key: '__ecom_accesstoken', value: auth.accessToken);
     await storage.write(key: '__ecom_refreshtoken', value: auth.refreshToken);
   }
 
+  // Logout; Session end
   logout() {
     storage.deleteAll();
     _authData = null;

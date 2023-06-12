@@ -12,9 +12,9 @@ class Product {
   Product.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     price = json['price'];
-    discountPrice = json['discountPrice'];
+    discountPrice = json['discount_price'];
     name = json['name'];
-    image = json['image'];
+    image = json['images'][0]["url"];
   }
 
   static List<Product> listFromJson(List<dynamic> json) {

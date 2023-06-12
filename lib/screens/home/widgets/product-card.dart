@@ -34,6 +34,7 @@ class ProductCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
+                // Product image
                 AspectRatio(
                   aspectRatio: 1.5,
                   child: Container(
@@ -41,7 +42,7 @@ class ProductCard extends StatelessWidget {
                     child: CachedNetworkImage(
                       fit: BoxFit.cover,
                       imageUrl:
-                          "https://placeimg.com/640/480/food?i="+index.toString(),
+                          "${product.image ?? ''}?i=$index",
                       placeholder: (context, url) => const Center(
                         child: Icon(Icons.image),
                       ),
@@ -50,109 +51,112 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            product.name ?? "",
-                            style: TextStyle(
-                                fontSize: 14.sp,
-                                overflow: TextOverflow.ellipsis),
-                            maxLines: 2,
-                            softWrap: true,
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Text("Rs.4500.00",
-                              style: TextStyle(
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color:
-                                      Theme.of(context).disabledColor)),
-                          Text("Rs.4200.00",
-                              style: TextStyle(
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.bold))
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                        bottom: -5,
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [ Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.secondary ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
+                SizedBox(
+                  width: double.infinity,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 10,
                             ),
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(20)
-                            )
-                          ),
-                          child: Icon(
-                            Icons.add,
-                            color:
-                                Theme.of(context).colorScheme.onPrimary,
-                          ),
+                            Text(
+                              product.name ?? "",
+                              style: TextStyle(
+                                  fontSize: 14.sp,
+                                  overflow: TextOverflow.ellipsis),
+                              maxLines: 2,
+                              softWrap: true,
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Text("Rs.${product.discountPrice}",
+                                style: TextStyle(
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color:
+                                        Theme.of(context).disabledColor)),
+                            Text("Rs.${product.price}",
+                                style: TextStyle(
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.bold))
+                          ],
                         ),
-                        ),
-                    Positioned(
-                        top: -15,
-                        right: 5,
-                        child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 2),
-                            margin: const EdgeInsets.all(5.0),
+                      ),
+                      Positioned(
+                          bottom: -5,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15),
                             decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .surface,
-                                borderRadius: BorderRadius.circular(5),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .shadow
-                                        .withOpacity(0.2),
-                                    spreadRadius: 3,
-                                    blurRadius: 5,
-                                    offset: const Offset(2, 2),
-                                  )
-                                ]),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.star,
-                                  size: 15.0,
+                              gradient: LinearGradient(
+                                colors: [ Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.secondary ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(20)
+                              )
+                            ),
+                            child: Icon(
+                              Icons.add,
+                              color:
+                                  Theme.of(context).colorScheme.onPrimary,
+                            ),
+                          ),
+                          ),
+                      Positioned(
+                          top: -15,
+                          right: 5,
+                          child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 2),
+                              margin: const EdgeInsets.all(5.0),
+                              decoration: BoxDecoration(
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .primary,
-                                ),
-                                const SizedBox(
-                                  width: 5.0,
-                                ),
-                                Text(
-                                  "7.5",
-                                  style: TextStyle(
+                                      .surface,
+                                  borderRadius: BorderRadius.circular(5),
+                                  boxShadow: [
+                                    BoxShadow(
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .primary),
-                                )
-                              ],
-                            )))
-                  ],
+                                          .shadow
+                                          .withOpacity(0.2),
+                                      spreadRadius: 3,
+                                      blurRadius: 5,
+                                      offset: const Offset(2, 2),
+                                    )
+                                  ]),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.star,
+                                    size: 15.0,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary,
+                                  ),
+                                  const SizedBox(
+                                    width: 5.0,
+                                  ),
+                                  Text(
+                                    "7.5",
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                  )
+                                ],
+                              )))
+                    ],
+                  ),
                 )
               ],
             ),
